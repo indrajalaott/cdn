@@ -1,5 +1,5 @@
 // src/Login.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { TextField, Button, Container, Typography, Box, Snackbar, Alert } from '@mui/material';
@@ -10,8 +10,16 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [loading, setLoading] = useState(false); // Loading state
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+    // Check for existing token on component mount
+    useEffect(() => {
+        const token = Cookies.get('token');
+        if (token) {
+            navigate('/home'); // Redirect to home if token exists
+        }
+    }, [navigate]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -23,7 +31,7 @@ const Login = () => {
             return;
         }
 
-        setLoading(true); // Set loading state to true
+        setLoading(true);
 
         try {
             const response = await axios.post('https://api.indrajala.in/api/admin/login', {
@@ -50,7 +58,7 @@ const Login = () => {
             }
             setOpenSnackbar(true);
         } finally {
-            setLoading(false); // Reset loading state
+            setLoading(false);
         }
     };
 
@@ -101,7 +109,7 @@ const Login = () => {
                     variant="contained" 
                     fullWidth 
                     sx={{ marginTop: 2 }} 
-                    disabled={loading} // Disable button if loading
+                    disabled={loading}
                 >
                     {loading ? 'Logging in...' : 'Login'}
                 </Button>
