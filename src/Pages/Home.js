@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import './Home.css';
 import AddMovie from './AddMovie';
 import MovieList from './MovieList';
+import AddList from './AddList';
 
 const Home = () => {
     const token = Cookies.get('token'); // Get the token from cookies
@@ -24,7 +25,7 @@ const Home = () => {
             case 'movieList':
                 return <MovieList token={token} />;
             case 'addList':
-                return <Typography variant="h6">Add List Content Here</Typography>;
+                return <AddList token={token} />;
             case 'listAll':
                 return <Typography variant="h6">All Lists Content Here</Typography>;
             default:
