@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Cookies from 'js-cookie'; // Make sure you have this package installed
+import Login from './Pages/Login';
+import Home from './Pages/Home';
+import MovieList from './Pages/MovieList';  // Import MovieList
+import MovieDetail from './Pages/MovieDetail'; // Import MovieDetail
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const token = Cookies.get('token'); // Get the token from cookies
+
+    return (
+        <Router>
+            <Routes>
+                {/* If no token, route to Login page */}
+                <Route path="/" element={token ? <Navigate to="/home" /> : <Login />} />
+                {/* If token is present, route to Home */}
+                <Route path="/home" element={token ? <Home /> : <Navigate to="/" />} />
+                {/* Protected routes */}
+                <Route path="/movies" element={token ? <MovieList token={token} /> : <Navigate to="/" />} />  {/* Route for Movie List */}
+                <Route path="/movies/:id" element={token ? <MovieDetail token={token} /> : <Navigate to="/" />} /> {/* Route for Movie Detail */}
+            </Routes>
+        </Router>
+    );
+};
 
 export default App;
