@@ -30,13 +30,17 @@ const AddMovie = ({ token }) => {
 
     const handleFileChange = (e) => {
         const { name, files } = e.target;
-        setMovieData({ ...movieData, [name]: files[0] });
+        // Check if any files are selected
+        if (files.length > 0) {
+            setMovieData({ ...movieData, [name]: files[0] });
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
 
+        // Append form data fields
         for (const key in movieData) {
             formData.append(key, movieData[key]);
         }
@@ -52,6 +56,7 @@ const AddMovie = ({ token }) => {
             });
             console.log('Movie added successfully:', response.data);
             setOpenSnackbar(true); // Show success alert
+            // Reset form fields
             setMovieData({
                 movieName: '',
                 description: '',
