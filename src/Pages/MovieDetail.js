@@ -15,7 +15,7 @@ const MovieDetail = ({ token }) => {
     useEffect(() => {
         const fetchMovieDetail = async () => {
             try {
-                const response = await axios.get(`http://localhost:20000/api/admin/movies/${id}`, {
+                const response = await axios.get(`https://api.indrajala.in/api/admin/movies/${id}`, {
                     headers: {
                         'x-access-protected': token,
                     },
@@ -33,7 +33,7 @@ const MovieDetail = ({ token }) => {
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:20000/api/admin/movies/${id}`, {
+            await axios.delete(`https://api.indrajala.in/api/admin/movies/${id}`, {
                 headers: {
                     'x-access-protected': token,
                 },

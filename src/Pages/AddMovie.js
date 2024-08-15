@@ -44,7 +44,7 @@ const AddMovie = ({ token }) => {
         setLoading(true); // Start loading
 
         try {
-            const response = await axios.post('http://localhost:20000/api/admin/add-videos', formData, {
+            const response = await axios.post('https://api.indrajala.in/api/admin/add-videos', formData, {
                 headers: {
                     'x-access-protected': token,
                     'Content-Type': 'multipart/form-data',
