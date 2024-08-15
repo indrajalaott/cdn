@@ -89,6 +89,10 @@ const MovieDetail = ({ token }) => {
                         src={movie.smallMovieImage} 
                         alt={movie.movieName} 
                         className="small-movie-image" 
+                        onError={(e) => {
+                            e.target.onerror = null; // Prevents looping
+                            e.target.src = '/path/to/default/image.png'; // Fallback image
+                        }} 
                     />
                     <Button variant="contained" color="secondary" onClick={handleDelete} style={{ marginTop: '20px' }}>
                         Delete Movie
