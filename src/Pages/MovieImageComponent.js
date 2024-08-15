@@ -6,7 +6,7 @@ const MovieImageComponent = () => {
 
   return (
     <img
-      src={`/path/to/images/${imageId}`}
+      src={`https://cdn.indrajala.in/movieImages/${imageId}`}
       alt="Movie"
       style={{ maxWidth: '100%', height: 'auto' }}
     />

@@ -86,15 +86,15 @@ const MovieDetail = ({ token }) => {
                         <strong>Description:</strong> {movie.description}
                     </Typography>
                     <img
-  src={`/movieImages/${movie.smallMovieImage}`}
-  alt={movie.movieName}
-  className="small-movie-image"
-  onError={(e) => {
-    console.error('Image failed to load:', e.target.src);
-    e.target.onerror = null; // Prevents looping
-    e.target.src = '/path/to/default/image.png'; // Fallback image
-  }}
-/>
+                        src={`/movieImages/${movie.smallMovieImage}`}
+                        alt={movie.movieName}
+                        className="small-movie-image"
+                        onError={(e) => {
+                            console.error('Image failed to load:', e.target.src);
+                            e.target.onerror = null; // Prevents looping
+                            e.target.src = '/path/to/default/image.png'; // Fallback image
+                        }}
+                    /> {/* Correctly closed img tag */}
                     <Button variant="contained" color="secondary" onClick={handleDelete} style={{ marginTop: '20px' }}>
                         Delete Movie
                     </Button>
