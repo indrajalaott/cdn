@@ -1,18 +1,12 @@
 // src/App.js
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Cookies from 'js-cookie'; // Make sure you have this package installed
 import Login from './Pages/Login';
 import Home from './Pages/Home';
 import MovieList from './Pages/MovieList';  // Import MovieList
 import MovieDetail from './Pages/MovieDetail'; // Import MovieDetail
-
-const ImageDisplay = () => {
-    const { imageName } = useParams(); // Extract imageName from route parameters
-    return (
-        <img src={`https://api.indrajala.in/movieImages/${imageName}`} alt={imageName} />
-    );
-};
+import MovieImageComponent from './Pages/MovieImageComponent'; // Import MovieImageComponent
 
 const App = () => {
     const token = Cookies.get('token'); // Get the token from cookies
@@ -28,7 +22,7 @@ const App = () => {
                 <Route path="/movies" element={token ? <MovieList token={token} /> : <Navigate to="/" />} />  {/* Route for Movie List */}
                 <Route path="/movies/:id" element={token ? <MovieDetail token={token} /> : <Navigate to="/" />} /> {/* Route for Movie Detail */}
                 {/* Route for displaying images */}
-                <Route path="/movieImages/:imageName" element={<ImageDisplay />} />
+                <Route path="/movieImages/:imageId" element={<MovieImageComponent />} />
             </Routes>
         </Router>
     );
