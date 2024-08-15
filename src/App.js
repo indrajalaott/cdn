@@ -6,6 +6,7 @@ import Login from './Pages/Login';
 import Home from './Pages/Home';
 import MovieList from './Pages/MovieList';  // Import MovieList
 import MovieDetail from './Pages/MovieDetail'; // Import MovieDetail
+import ImageDisplay from './Pages/ImageDisplay'; // Import ImageDisplay component
 
 const App = () => {
     const token = Cookies.get('token'); // Get the token from cookies
@@ -20,6 +21,8 @@ const App = () => {
                 {/* Protected routes */}
                 <Route path="/movies" element={token ? <MovieList token={token} /> : <Navigate to="/" />} />  {/* Route for Movie List */}
                 <Route path="/movies/:id" element={token ? <MovieDetail token={token} /> : <Navigate to="/" />} /> {/* Route for Movie Detail */}
+                {/* Route for displaying images */}
+                <Route path="/movieImages/:imageName" element={<ImageDisplay />} /> {/* New route for image display */}
             </Routes>
         </Router>
     );
