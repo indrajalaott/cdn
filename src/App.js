@@ -2,7 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import Login from './Pages/Login';
+import Login from './Pages/Login'; // Import Login
 import Home from './Pages/Home';
 import MovieList from './Pages/MovieList';
 import MovieDetail from './Pages/MovieDetail';
@@ -16,6 +16,9 @@ const App = () => {
             <Routes>
                 {/* Redirect to Home if token exists, else to Login */}
                 <Route path="/" element={<Navigate to={token ? '/home' : '/login'} replace />} />
+                
+                {/* Login route */}
+                <Route path="/login" element={<Login />} /> {/* Add this line to use Login component */}
                 
                 {/* Protected routes */}
                 <Route path="/home" element={token ? <Home /> : <Navigate to="/login" replace />} />
