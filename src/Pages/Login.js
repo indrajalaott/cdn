@@ -30,10 +30,17 @@ const Login = () => {
                 email,
                 password,
             });
-            Cookies.set('token', response.data.token); // Store token in cookies
-            setEmail(''); // Clear email field
-            setPassword(''); // Clear password field
-            navigate('/home'); // Redirect to home page
+
+            // Check if the response status is 200 and token exists
+            if (response.status === 200 && response.data.token) {
+                Cookies.set('token', response.data.token); // Store token in cookies
+                setEmail(''); // Clear email field
+                setPassword(''); // Clear password field
+                navigate('/home'); // Redirect to home page
+            } else {
+                setErrorMessage('Login failed. Please check your credentials.');
+                setOpenSnackbar(true);
+            }
         } catch (error) {
             console.error('Login failed:', error);
             if (error.response && error.response.data) {
