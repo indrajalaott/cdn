@@ -10,11 +10,12 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [loading, setLoading] = useState(false); // Loading state
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        
+
         // Validate fields
         if (!email || !password) {
             setErrorMessage('Both fields are required.');
@@ -22,17 +23,27 @@ const Login = () => {
             return;
         }
 
+        setLoading(true); // Set loading state to true
+
         try {
             const response = await axios.post('https://api.indrajala.in/api/admin/login', {
                 email,
                 password,
             });
             Cookies.set('token', response.data.token); // Store token in cookies
+            setEmail(''); // Clear email field
+            setPassword(''); // Clear password field
             navigate('/home'); // Redirect to home page
         } catch (error) {
             console.error('Login failed:', error);
-            setErrorMessage('Login failed. Please check your credentials.');
+            if (error.response && error.response.data) {
+                setErrorMessage(error.response.data.error || 'Login failed. Please check your credentials.');
+            } else {
+                setErrorMessage('An unexpected error occurred. Please try again later.');
+            }
             setOpenSnackbar(true);
+        } finally {
+            setLoading(false); // Reset loading state
         }
     };
 
@@ -78,8 +89,14 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                <Button type="submit" variant="contained" fullWidth sx={{ marginTop: 2 }}>
-                    Login
+                <Button 
+                    type="submit" 
+                    variant="contained" 
+                    fullWidth 
+                    sx={{ marginTop: 2 }} 
+                    disabled={loading} // Disable button if loading
+                >
+                    {loading ? 'Logging in...' : 'Login'}
                 </Button>
             </Box>
 
