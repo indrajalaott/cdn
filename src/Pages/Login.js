@@ -23,7 +23,7 @@ const Login = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:20000/api/admin/login', {
+            const response = await axios.post('https://api.indrajala.in/api/admin/login', {
                 email,
                 password,
             });
