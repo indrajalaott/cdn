@@ -15,12 +15,12 @@ const App = () => {
         <Router>
             <Routes>
                 {/* If no token, route to Login page */}
-                <Route path="/" element={token ? <Navigate to="/home" /> : <Login />} />
+                <Route path="/" element={token ? <Navigate to="/home" replace /> : <Login />} />
                 {/* If token is present, route to Home */}
-                <Route path="/home" element={token ? <Home /> : <Navigate to="/" />} />
+                <Route path="/home" element={token ? <Home /> : <Navigate to="/" replace />} />
                 {/* Protected routes */}
-                <Route path="/movies" element={token ? <MovieList token={token} /> : <Navigate to="/" />} />  {/* Route for Movie List */}
-                <Route path="/movies/:id" element={token ? <MovieDetail token={token} /> : <Navigate to="/" />} /> {/* Route for Movie Detail */}
+                <Route path="/movies" element={token ? <MovieList token={token} /> : <Navigate to="/" replace />} />  {/* Route for Movie List */}
+                <Route path="/movies/:id" element={token ? <MovieDetail token={token} /> : <Navigate to="/" replace />} /> {/* Route for Movie Detail */}
                 {/* Route for displaying images */}
                 <Route path="/movieImages/:imageId" element={<MovieImageComponent />} />
             </Routes>
