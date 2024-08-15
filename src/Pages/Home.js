@@ -7,14 +7,16 @@ import AddMovie from './AddMovie';
 import MovieList from './MovieList';
 
 const Home = () => {
-    const token = Cookies.get('token');
-    const [selectedOption, setSelectedOption] = useState('');
+    const token = Cookies.get('token'); // Get the token from cookies
+    const [selectedOption, setSelectedOption] = useState(''); // State to track selected option
 
+    // Redirect to login if not authenticated
     if (!token) {
-        window.location.href = '/'; // Redirect to login if not authenticated
-        return null;
+        window.location.href = '/'; 
+        return null; // Prevent rendering the rest of the component
     }
 
+    // Function to render content based on selected option
     const renderContent = () => {
         switch (selectedOption) {
             case 'addMovie':
@@ -57,7 +59,7 @@ const Home = () => {
                     <Typography variant="h4">Welcome to the Home Page</Typography>
                     <Typography variant="body1">You are logged in!</Typography>
                     <Box marginTop={2}>
-                        {renderContent()}
+                        {renderContent()} {/* Render the selected content */}
                     </Box>
                 </Box>
             </Box>
