@@ -86,7 +86,7 @@ const MovieDetail = ({ token }) => {
                         <strong>Description:</strong> {movie.description}
                     </Typography>
                     <img
-                        src={`/public/${movie.smallMovieImage}`}
+                        src={`/public${movie.smallMovieImage}`}
                         alt={movie.movieName}
                         className="small-movie-image"
                         onError={(e) => {
