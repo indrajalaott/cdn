@@ -61,7 +61,7 @@ const MovieList = ({ token }) => {
                             <Typography variant="h6">{movie.movieName}</Typography>
                             <Typography variant="body2">{movie.description}</Typography>
                             <img 
-                                src={movie.smallMovieImage} 
+                                src={`https://api.indrajala.in/public${movie.smallMovieImage}`}
                                 alt={movie.movieName} 
                                 style={{ width: '100%', borderRadius: '8px' }} 
                             />
