@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import Login from './Pages/Login';
 import Home from './Pages/Home';
 import MovieList from './Pages/MovieList';
+import UserPage from './Pages/SearchUser';
 import MovieDetail from './Pages/MovieDetail';
 import MovieImageComponent from './Pages/MovieImageComponent';
 
@@ -21,6 +22,7 @@ const App = () => {
                 
                 {/* Protected routes */}
                 <Route path="/home" element={token ? <Home /> : <Navigate to="/login" replace />} />
+                <Route path="/users" element={token ? <UserPage /> : <Navigate to="/login" replace />} />
                 <Route path="/movies" element={token ? <MovieList token={token} /> : <Navigate to="/login" replace />} />
                 <Route path="/movies/:id" element={token ? <MovieDetail token={token} /> : <Navigate to="/login" replace />} />
                 <Route path="/movieImages/:imageId" element={token ? <MovieImageComponent /> : <Navigate to="/login" replace />} />
