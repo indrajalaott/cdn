@@ -64,8 +64,8 @@ const Home = () => {
 
                 {/* Right Content Area */}
                 <Box flexGrow={1} padding={2} bgcolor="#f5f5f5">
-                    <Typography variant="h4">Welcome to the Home Page</Typography>
-                    <Typography variant="body1">You are logged in!</Typography>
+                    <Typography variant="h4">INDRAJALA MOVIE MAKERS LLP | CDN </Typography>
+                    <Typography variant="body1">Welcome Admin</Typography>
                     <Box marginTop={2}>
                         {renderContent()} {/* Render the selected content */}
                     </Box>
