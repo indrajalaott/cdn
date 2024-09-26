@@ -41,11 +41,18 @@
     background-color: #0056b3;
 }
 
-/* Error message styling */
-.error-message {
-    color: red;
+/* Error and success message styling */
+.error-message, .success-message {
     margin-top: 10px;
     font-weight: bold;
+}
+
+.error-message {
+    color: red;
+}
+
+.success-message {
+    color: green;
 }
 
 /* User details container */

@@ -6,6 +6,7 @@ const FindUser = ({ token }) => {
     const [input, setInput] = useState('');
     const [result, setResult] = useState(null);
     const [error, setError] = useState(null);
+    const [successMessage, setSuccessMessage] = useState(null);
 
     // Handle input changes for email or phone number input
     const handleInputChange = (e) => {
@@ -61,6 +62,33 @@ const FindUser = ({ token }) => {
         }
     };
 
+    // Function to update user plan
+    const updateUserPlan = async (selection) => {
+        if (!result || !result.email) {
+            setError('No user details available for updating.');
+            return;
+        }
+        try {
+            const response = await axios.post(
+                'https://api.indrajala.in/api/admin/upDateUser',
+                {
+                    email: result.email,
+                    selection: selection,
+                },
+                {
+                    headers: {
+                        'x-access-protected': token
+                    }
+                }
+            );
+            setSuccessMessage(`User plan updated to ${selection} successfully.`);
+            setError(null);
+        } catch (err) {
+            setSuccessMessage(null);
+            setError('Error updating user plan. Please try again.');
+        }
+    };
+
     return (
         <div className="find-user-container">
             <h2>Find User</h2>
@@ -76,6 +104,7 @@ const FindUser = ({ token }) => {
                 <button onClick={searchByPhoneNumber} className="search-button">Search by Phone Number</button>
             </div>
             {error && <p className="error-message">{error}</p>}
+            {successMessage && <p className="success-message">{successMessage}</p>}
             {result && (
                 <div className="user-details">
                     <h3>User Details:</h3>
@@ -86,10 +115,10 @@ const FindUser = ({ token }) => {
                     <p><strong>Expiry Date:</strong> {new Date(result.expiryDate).toLocaleDateString()}</p>
                     <p><strong>Status:</strong> {isActiveUser(result.expiryDate) ? 'Active User' : 'Expired User'}</p>
                     <div className="update-buttons">
-                        <button className="update-button">Update to Basic Plan</button>
-                        <button className="update-button">Update to Golden Plan</button>
-                        <button className="update-button">Update to Standard Plan</button>
-                        <button className="update-button">Update to Premium Plan</button>
+                        <button className="update-button" onClick={() => updateUserPlan('A')}>Update to Basic Plan</button>
+                        <button className="update-button" onClick={() => updateUserPlan('B')}>Update to Golden Plan</button>
+                        <button className="update-button" onClick={() => updateUserPlan('C')}>Update to Standard Plan</button>
+                        <button className="update-button" onClick={() => updateUserPlan('D')}>Update to Premium Plan</button>
                     </div>
                 </div>
             )}
