@@ -6,6 +6,7 @@ const ManageTopFive = ({ token }) => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [addedMovies, setAddedMovies] = useState([]); // Track added movies
 
   // Fetching movies on component load
   useEffect(() => {
@@ -26,6 +27,34 @@ const ManageTopFive = ({ token }) => {
 
     fetchMovies();
   }, [token]);
+
+  // Function to handle adding movie to the top five list
+  const addToList = async (movieID) => {
+    try {
+      const response = await axios.post(
+        'https://api.indrajala.in/api/admin/AddtoList',
+        {
+          movieID,
+          cat: 1 // cat set to 1 for top five movies
+        },
+        {
+          headers: {
+            'x-access-protected': token
+          }
+        }
+      );
+
+      // Check if the response status is 201 (Created)
+      if (response.status === 201) {
+        // Add the movieID to the addedMovies list to track successfully added movies
+        setAddedMovies((prevAddedMovies) => [...prevAddedMovies, movieID]);
+      } else {
+        setError('Failed to add movie to the list');
+      }
+    } catch (error) {
+      setError('Failed to add movie to the list');
+    }
+  };
 
   if (loading) {
     return <p>Loading movies...</p>;
@@ -54,7 +83,13 @@ const ManageTopFive = ({ token }) => {
                   <h3>{movie.movieName}</h3>
                   <p>{movie.description}</p>
                   <span className="movie-category">{movie.category.join(', ')}</span>
-                  <button className="add-button">Add to List</button>
+                  <button
+                    className="add-button"
+                    onClick={() => addToList(movie._id)}
+                    disabled={addedMovies.includes(movie._id)} // Disable button if already added
+                  >
+                    {addedMovies.includes(movie._id) ? 'Added to List' : 'Add to List'}
+                  </button>
                 </div>
               </div>
             ))}
@@ -65,7 +100,6 @@ const ManageTopFive = ({ token }) => {
           <div className="top-five-list">
             {/* Add your top five movie list here */}
           </div>
-  
         </div>
       </div>
     </div>
