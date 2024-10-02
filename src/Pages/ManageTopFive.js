@@ -1,21 +1,75 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import './ManageTopFive.css'; // Custom CSS
 
 const ManageTopFive = ({ token }) => {
-   
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    
-   
+  // Fetching movies on component load
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const response = await axios.get('https://api.indrajala.in/api/admin/showallmovies', {
+          headers: {
+            'x-access-protected': token
+          }
+        });
+        setMovies(response.data); // Set the fetched movies
+        setLoading(false);
+      } catch (error) {
+        setError('Failed to fetch movies');
+        setLoading(false);
+      }
+    };
 
-    return (
-        <div >
-            <h1>Manage Top Five Movies</h1>
-            
-            
-            
+    fetchMovies();
+  }, [token]);
+
+  if (loading) {
+    return <p>Loading movies...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  return (
+    <div className="manage-container">
+      <h1>Manage Top Five Movies</h1>
+      <div className="split-page">
+        <div className="available-movies">
+          <h2>Available Movies</h2>
+          <div className="movie-list">
+            {movies.map(movie => (
+              <div key={movie._id} className="movie-item">
+                <div className="movie-image">
+                  <img
+                    src={`https://api.indrajala.in/public${movie.movieMobileImage}`}
+                    alt={movie.movieName}
+                  />
+                </div>
+                <div className="movie-details">
+                  <h3>{movie.movieName}</h3>
+                  <p>{movie.description}</p>
+                  <span className="movie-category">{movie.category.join(', ')}</span>
+                  <button className="add-button">Add to List</button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-    );
+        <div className="top-five-section">
+          <h2>Top Five Movies</h2>
+          <div className="top-five-list">
+            {/* Add your top five movie list here */}
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default ManageTopFive;
