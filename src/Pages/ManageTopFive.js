@@ -9,7 +9,7 @@ const ManageTopFive = ({ token }) => {
    
 
     return (
-        <div className="find-user-container">
+        <div >
             <h1>Manage Top Five Movies</h1>
             
             
