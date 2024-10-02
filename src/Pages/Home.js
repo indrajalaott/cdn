@@ -7,6 +7,7 @@ import AddMovie from './AddMovie';
 import MovieList from './MovieList';
 import AddList from './AddList';
 import FindUser from './SearchUser';
+import ManageTopFive from './ManageTopFive';
 
 const Home = () => {
     const token = Cookies.get('token'); // Get the token from cookies
@@ -29,6 +30,8 @@ const Home = () => {
                 return <AddList token={token} />;
             case 'searchUser':
                     return <FindUser token={token} />;
+            case 'topfive':
+                    return <ManageTopFive token={token} />;
             case 'listAll':
                 return <Typography variant="h6">All Lists Content Here</Typography>;
             default:
@@ -57,6 +60,9 @@ const Home = () => {
                         </ListItem>
                         <ListItem button onClick={() => setSelectedOption('searchUser')} className="sidebar-item">
                             <ListItemText primary="Search User" />
+                        </ListItem>
+                        <ListItem button onClick={() => setSelectedOption('topfive')} className="sidebar-item">
+                            <ListItemText primary="Top 5 Movies" />
                         </ListItem>
 
                     </List>
