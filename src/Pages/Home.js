@@ -5,7 +5,6 @@ import Cookies from 'js-cookie';
 import './Home.css';
 import AddMovie from './AddMovie';
 import MovieList from './MovieList';
-import AddList from './AddList';
 import FindUser from './SearchUser';
 import ManageTopFive from './ManageTopFive';
 
@@ -26,14 +25,11 @@ const Home = () => {
                 return <AddMovie token={token} />;
             case 'movieList':
                 return <MovieList token={token} />;
-            case 'addList':
-                return <AddList token={token} />;
             case 'searchUser':
                     return <FindUser token={token} />;
             case 'topfive':
                     return <ManageTopFive token={token} />;
-            case 'listAll':
-                return <Typography variant="h6">All Lists Content Here</Typography>;
+           
             default:
                 return <Typography variant="h6">Please select an option from the left.</Typography>;
         }
@@ -52,12 +48,7 @@ const Home = () => {
                         <ListItem button onClick={() => setSelectedOption('movieList')} className="sidebar-item">
                             <ListItemText primary="Movie List" />
                         </ListItem>
-                        <ListItem button onClick={() => setSelectedOption('addList')} className="sidebar-item">
-                            <ListItemText primary="Add List" />
-                        </ListItem>
-                        <ListItem button onClick={() => setSelectedOption('listAll')} className="sidebar-item">
-                            <ListItemText primary="List All Lists" />
-                        </ListItem>
+                        
                         <ListItem button onClick={() => setSelectedOption('searchUser')} className="sidebar-item">
                             <ListItemText primary="Search User" />
                         </ListItem>
