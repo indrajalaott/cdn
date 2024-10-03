@@ -7,8 +7,9 @@ const ManageTopFive = ({ token }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [addedMovies, setAddedMovies] = useState([]); // Track added movies
+  const [topFiveMovies, setTopFiveMovies] = useState([]); // State for top 5 movies
 
-  // Fetching movies on component load
+  // Fetching all available movies
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -28,6 +29,21 @@ const ManageTopFive = ({ token }) => {
     fetchMovies();
   }, [token]);
 
+  // Fetching top 5 movies
+  useEffect(() => {
+    const fetchTopFiveMovies = async () => {
+      try {
+        const response = await axios.get('http://api.indrajala.in/api/admin/ViewTop5Movies');
+        console.log('Top 5 Movies:', response.data); // Log the response data to the console
+        setTopFiveMovies(response.data.movies); // Save the top 5 movies in state
+      } catch (error) {
+        console.error('Failed to fetch top 5 movies:', error);
+      }
+    };
+
+    fetchTopFiveMovies();
+  }, []);
+
   // Function to handle adding movie to the top five list
   const addToList = async (movieID) => {
     try {
@@ -44,9 +60,7 @@ const ManageTopFive = ({ token }) => {
         }
       );
 
-      // Check if the response status is 201 (Created)
       if (response.status === 201) {
-        // Add the movieID to the addedMovies list to track successfully added movies
         setAddedMovies((prevAddedMovies) => [...prevAddedMovies, movieID]);
       } else {
         setError('Failed to add movie to the list');
@@ -98,7 +112,25 @@ const ManageTopFive = ({ token }) => {
         <div className="top-five-section">
           <h2>Top Five Movies</h2>
           <div className="top-five-list">
-            {/* Add your top five movie list here */}
+            {topFiveMovies.length > 0 ? (
+              topFiveMovies.map(movie => (
+                <div key={movie._id} className="movie-item">
+                  <div className="movie-image">
+                    <img
+                      src={`https://api.indrajala.in/public${movie.movieMobileImage}`}
+                      alt={movie.movieName}
+                    />
+                  </div>
+                  <div className="movie-details">
+                    <h3>{movie.movieName}</h3>
+                    <p>{movie.description}</p>
+                    <span className="movie-category">{movie.category.join(', ')}</span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No movies in the top 5 list</p>
+            )}
           </div>
         </div>
       </div>
