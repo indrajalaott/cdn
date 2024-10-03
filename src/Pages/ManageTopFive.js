@@ -33,7 +33,7 @@ const ManageTopFive = ({ token }) => {
   useEffect(() => {
     const fetchTopFiveMovies = async () => {
       try {
-        const response = await axios.get('http://api.indrajala.in/api/admin/ViewTop5Movies');
+        const response = await axios.get('https://api.indrajala.in/api/admin/ViewTop5Movies');
         console.log('Top 5 Movies:', response.data); // Log the response data to the console
         setTopFiveMovies(response.data.movies); // Save the top 5 movies in state
       } catch (error) {
