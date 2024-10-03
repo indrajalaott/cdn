@@ -52,7 +52,7 @@ const ManageTopFive = ({ token }) => {
         'https://api.indrajala.in/api/admin/AddtoList',
         {
           movieID,
-          cat: 1 // cat set to 1 for top five movies
+          cat: 2 // cat set to 1 for top five movies
         },
         {
           headers: {
