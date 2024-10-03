@@ -120,3 +120,23 @@
     border-left: 2px solid #ddd;
   }
   
+  /* Remove from List button */
+.remove-button {
+  padding: 10px 20px;
+  background-color: #dc3545; /* Red background for remove button */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px; /* Spacing between button and other content */
+}
+
+.remove-button:hover {
+  background-color: #c82333; /* Darker red on hover */
+}
+
+.remove-button:disabled {
+  background-color: #6c757d; /* Gray out the button if disabled */
+  cursor: not-allowed;
+}

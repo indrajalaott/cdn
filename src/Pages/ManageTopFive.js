@@ -8,6 +8,7 @@ const ManageTopFive = ({ token }) => {
   const [error, setError] = useState(null);
   const [addedMovies, setAddedMovies] = useState([]); // Track added movies
   const [topFiveMovies, setTopFiveMovies] = useState([]); // State for top 5 movies
+  const [successMessage, setSuccessMessage] = useState(''); // For showing success messages
 
   // Fetching all available movies
   useEffect(() => {
@@ -70,6 +71,35 @@ const ManageTopFive = ({ token }) => {
     }
   };
 
+  // Function to remove a movie from the top five list
+  const removeFromTopFive = async (movieID) => {
+    try {
+      const response = await axios.post(
+        'https://api.indrajala.in/api/admin/RemoveFromTopFive',
+        {
+          movieID
+        },
+        {
+          headers: {
+            'x-access-protected': token
+          }
+        }
+      );
+
+      if (response.status === 200) {
+        // Remove the movie from the topFiveMovies array after successful deletion
+        setTopFiveMovies((prevTopFiveMovies) => 
+          prevTopFiveMovies.filter(movie => movie._id !== movieID)
+        );
+        setSuccessMessage('Movie removed from the top five successfully');
+      } else {
+        setError('Failed to remove movie from the list');
+      }
+    } catch (error) {
+      setError('Failed to remove movie from the list');
+    }
+  };
+
   if (loading) {
     return <p>Loading movies...</p>;
   }
@@ -81,6 +111,7 @@ const ManageTopFive = ({ token }) => {
   return (
     <div className="manage-container">
       <h1>Manage Top Five Movies</h1>
+      {successMessage && <p className="success-message">{successMessage}</p>} {/* Show success message */}
       <div className="split-page">
         <div className="available-movies">
           <h2>Available Movies</h2>
@@ -125,6 +156,12 @@ const ManageTopFive = ({ token }) => {
                     <h3>{movie.movieName}</h3>
                     <p>{movie.description}</p>
                     <span className="movie-category">{movie.category.join(', ')}</span>
+                    <button
+                      className="remove-button"
+                      onClick={() => removeFromTopFive(movie._id)}
+                    >
+                      Remove from List
+                    </button>
                   </div>
                 </div>
               ))
