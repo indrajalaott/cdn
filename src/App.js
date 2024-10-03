@@ -8,6 +8,7 @@ import UserPage from './Pages/SearchUser';
 import MovieDetail from './Pages/MovieDetail';
 import MovieImageComponent from './Pages/MovieImageComponent';
 import ManageTopFive from './Pages/ManageTopFive';
+import ManageTrending from './Pages/Trending';
 
 const App = () => {
     const token = Cookies.get('token');
@@ -28,6 +29,7 @@ const App = () => {
                 <Route path="/movies/:id" element={token ? <MovieDetail token={token} /> : <Navigate to="/login" replace />} />
                 <Route path="/movieImages/:imageId" element={token ? <MovieImageComponent /> : <Navigate to="/login" replace />} />
                 <Route path="/topfive" element={token ? <ManageTopFive /> : <Navigate to="/login" replace />} />
+                <Route path="/trending" element={token ? <ManageTrending /> : <Navigate to="/login" replace />} />
                 
                 {/* New route for serving images */}
                 <Route path="/public/movieImage/:imageId" element={<MovieImageComponent />} />

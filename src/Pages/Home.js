@@ -7,6 +7,7 @@ import AddMovie from './AddMovie';
 import MovieList from './MovieList';
 import FindUser from './SearchUser';
 import ManageTopFive from './ManageTopFive';
+import ManageTrending from './Trending';
 
 const Home = () => {
     const token = Cookies.get('token'); // Get the token from cookies
@@ -29,6 +30,8 @@ const Home = () => {
                     return <FindUser token={token} />;
             case 'topfive':
                     return <ManageTopFive token={token} />;
+            case 'trending':
+                    return <ManageTrending token={token} />;
            
             default:
                 return <Typography variant="h6">Please select an option from the left.</Typography>;
@@ -54,6 +57,9 @@ const Home = () => {
                         </ListItem>
                         <ListItem button onClick={() => setSelectedOption('topfive')} className="sidebar-item">
                             <ListItemText primary="Top 5 Movies" />
+                        </ListItem>
+                        <ListItem button onClick={() => setSelectedOption('trending')} className="sidebar-item">
+                            <ListItemText primary="Manage Trending Movies" />
                         </ListItem>
 
                     </List>
