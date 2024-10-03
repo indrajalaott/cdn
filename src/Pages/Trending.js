@@ -75,7 +75,7 @@ const ManageTopFive = ({ token }) => {
   const removeFromTopFive = async (movieID) => {
     try {
       const response = await axios.post(
-        'https://api.indrajala.in/api/admin/RemoveFromTopFive',
+        'https://api.indrajala.in/api/admin/RemoveFromTrending',
         {
           movieID
         },
