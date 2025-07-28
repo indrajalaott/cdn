@@ -1,5 +1,20 @@
 import React, { useState } from 'react';
-import { Typography, TextField, Button, Box, Select, MenuItem, InputLabel, FormControl, Grid, CircularProgress, Snackbar } from '@mui/material';
+import { 
+  Typography, 
+  TextField, 
+  Button, 
+  Box, 
+  Select, 
+  MenuItem, 
+  InputLabel, 
+  FormControl, 
+  Grid, 
+  CircularProgress,
+  Backdrop,
+  LinearProgress,
+  Snackbar,
+  Alert
+} from '@mui/material';
 import axios from 'axios';
 
 const AddMovie = ({ token }) => {
@@ -21,7 +36,12 @@ const AddMovie = ({ token }) => {
     });
 
     const [loading, setLoading] = useState(false);
-    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        message: '',
+        severity: 'success'
+    });
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -30,7 +50,6 @@ const AddMovie = ({ token }) => {
 
     const handleFileChange = (e) => {
         const { name, files } = e.target;
-        // Check if any files are selected
         if (files.length > 0) {
             setMovieData({ ...movieData, [name]: files[0] });
         }
@@ -45,7 +64,8 @@ const AddMovie = ({ token }) => {
             formData.append(key, movieData[key]);
         }
 
-        setLoading(true); // Start loading
+        setLoading(true);
+        setUploadProgress(0);
 
         try {
             const response = await axios.post('https://api.indrajala.in/api/admin/add-videos', formData, {
@@ -53,10 +73,24 @@ const AddMovie = ({ token }) => {
                     'x-access-protected': token,
                     'Content-Type': 'multipart/form-data',
                 },
+                onUploadProgress: (progressEvent) => {
+                    const progress = Math.round(
+                        (progressEvent.loaded * 100) / progressEvent.total
+                    );
+                    setUploadProgress(progress);
+                },
             });
+
             console.log('Movie added successfully:', response.data);
-            setOpenSnackbar(true); // Show success alert
-            // Reset form fields
+            
+            // Show success toast
+            setSnackbar({
+                open: true,
+                message: 'Movie uploaded successfully!',
+                severity: 'success'
+            });
+
+            // Reset form
             setMovieData({
                 movieName: '',
                 description: '',
@@ -75,17 +109,45 @@ const AddMovie = ({ token }) => {
             });
         } catch (error) {
             console.error('Error adding movie:', error);
+            setSnackbar({
+                open: true,
+                message: 'Error uploading movie. Please try again.',
+                severity: 'error'
+            });
         } finally {
-            setLoading(false); // Stop loading
+            setLoading(false);
+            setUploadProgress(0);
         }
     };
 
     const handleCloseSnackbar = () => {
-        setOpenSnackbar(false);
+        setSnackbar({...snackbar, open: false});
     };
 
     return (
-        <Box sx={{ padding: 4, backgroundColor: '#f5f5f5', borderRadius: 2 }}>
+        <Box sx={{ padding: 4, backgroundColor: '#f5f5f5', borderRadius: 2, position: 'relative' }}>
+            {/* Global Loading Overlay */}
+            <Backdrop
+                sx={{ 
+                    color: '#fff', 
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 2
+                }}
+                open={loading}
+            >
+                <Typography variant="h5">Uploading New Movie...</Typography>
+                <Box sx={{ width: '50%' }}>
+                    <LinearProgress 
+                        variant="determinate" 
+                        value={uploadProgress} 
+                        sx={{ height: 10, borderRadius: 5 }}
+                    />
+                </Box>
+                <Typography>{uploadProgress}%</Typography>
+            </Backdrop>
+
             <Typography variant="h4" gutterBottom align="center">Add Movie</Typography>
             <form onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
@@ -107,6 +169,8 @@ const AddMovie = ({ token }) => {
                             value={movieData.description}
                             onChange={handleInputChange}
                             required
+                            multiline
+                            rows={4}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -143,10 +207,11 @@ const AddMovie = ({ token }) => {
                         <TextField
                             fullWidth
                             name="duration"
-                            label="Duration"
+                            label="Duration (minutes)"
                             value={movieData.duration}
                             onChange={handleInputChange}
                             required
+                            type="number"
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -157,6 +222,7 @@ const AddMovie = ({ token }) => {
                                 labelId="rating-label"
                                 value={movieData.rating}
                                 onChange={handleInputChange}
+                                label="Rating"
                             >
                                 <MenuItem value="U">U</MenuItem>
                                 <MenuItem value="A">A</MenuItem>
@@ -178,74 +244,102 @@ const AddMovie = ({ token }) => {
                         <InputLabel htmlFor="movieFullImage">Movie Full Image</InputLabel>
                         <input
                             type="file"
+                            id="movieFullImage"
                             name="movieFullImage"
                             onChange={handleFileChange}
                             required
                             style={{ width: '100%' }}
+                            accept="image/*"
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <InputLabel htmlFor="movieLogoImage">Movie Logo Image</InputLabel>
                         <input
                             type="file"
+                            id="movieLogoImage"
                             name="movieLogoImage"
                             onChange={handleFileChange}
                             required
                             style={{ width: '100%' }}
+                            accept="image/*"
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <InputLabel htmlFor="movieMobileImage">Movie Mobile Image</InputLabel>
                         <input
                             type="file"
+                            id="movieMobileImage"
                             name="movieMobileImage"
                             onChange={handleFileChange}
                             required
                             style={{ width: '100%' }}
+                            accept="image/*"
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <InputLabel htmlFor="smallMovieImage">Small Movie Image</InputLabel>
                         <input
                             type="file"
+                            id="smallMovieImage"
                             name="smallMovieImage"
                             onChange={handleFileChange}
                             required
                             style={{ width: '100%' }}
+                            accept="image/*"
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <InputLabel htmlFor="trailerVideo">Trailer Video</InputLabel>
                         <input
                             type="file"
+                            id="trailerVideo"
                             name="trailerVideo"
                             onChange={handleFileChange}
                             required
                             style={{ width: '100%' }}
+                            accept="video/*"
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <InputLabel htmlFor="movieVideo">Movie Video</InputLabel>
                         <input
                             type="file"
+                            id="movieVideo"
                             name="movieVideo"
                             onChange={handleFileChange}
                             required
                             style={{ width: '100%' }}
+                            accept="video/*"
                         />
                     </Grid>
                 </Grid>
-                <Button type="submit" variant="contained" color="primary" fullWidth style={{ marginTop: '16px' }}>
-                    {loading ? <CircularProgress size={24} /> : 'Add Movie'}
+                <Button 
+                    type="submit" 
+                    variant="contained" 
+                    color="primary" 
+                    fullWidth 
+                    sx={{ mt: 3, py: 2 }}
+                    disabled={loading}
+                >
+                    Add Movie
                 </Button>
             </form>
 
+            {/* Toast Notification */}
             <Snackbar
-                open={openSnackbar}
+                open={snackbar.open}
                 autoHideDuration={6000}
                 onClose={handleCloseSnackbar}
-                message="Movie added successfully!"
-            />
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert 
+                    onClose={handleCloseSnackbar} 
+                    severity={snackbar.severity}
+                    sx={{ width: '100%' }}
+                >
+                    {snackbar.message}
+                </Alert>
+            </Snackbar>
         </Box>
     );
 };
